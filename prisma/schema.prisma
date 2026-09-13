@@ -1,0 +1,231 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               Int      @id @default(autoincrement())
+  email            String   @unique
+  passwordHash     String
+  nickname         String
+  occupation       String   // 互換用: 職種
+  experienceYears  Int      // 互換用: 経験年数
+  prefecture       String   // 互換用: 都道府県
+  role             String   @default("USER") // USER, ADMIN
+  createdAt        DateTime @default(now())
+  profile          Profile?
+  posts            Post[]
+  comments         Comment[]
+  reactions        Reaction[]
+}
+
+model Profile {
+  id               Int           @id @default(autoincrement())
+  userId           Int           @unique
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prefectureId     Int?
+  prefecture       Prefecture?   @relation(fields: [prefectureId], references: [id])
+  municipalityId   Int?
+  municipality     Municipality? @relation(fields: [municipalityId], references: [id])
+  fieldId          Int?
+  field            Field?        @relation(fields: [fieldId], references: [id])
+  serviceTypeId    Int?
+  serviceType      ServiceType?  @relation(fields: [serviceTypeId], references: [id])
+  occupationId     Int?
+  occupation       Occupation?   @relation(fields: [occupationId], references: [id])
+  experienceYears  Int?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+// 地域マスタ (都道府県)
+model Prefecture {
+  id             Int            @id @default(autoincrement())
+  name           String         // 例: 栃木県, 東京都
+  slug           String         @unique // 例: tochigi, tokyo
+  municipalities Municipality[]
+  posts          Post[]
+  profiles       Profile[]
+}
+
+// 地域マスタ (市区町村)
+model Municipality {
+  id           Int        @id @default(autoincrement())
+  prefectureId Int
+  prefecture   Prefecture @relation(fields: [prefectureId], references: [id], onDelete: Cascade)
+  name         String     // 例: 宇都宮市, 世田谷区
+  slug         String     // 例: utsunomiya, setagaya
+  posts        Post[]
+  profiles     Profile[]
+
+  @@unique([prefectureId, slug])
+}
+
+// 分野マスタ (大分類: 高齢者介護, 障害福祉, その他の福祉)
+model Field {
+  id           Int           @id @default(autoincrement())
+  name         String        // 例: 高齢者介護, 障害福祉
+  slug         String        @unique // 例: elderly, disability
+  serviceTypes ServiceType[]
+  posts        Post[]
+  profiles     Profile[]
+}
+
+// サービス種別マスタ (特養, デイサービス, 訪問介護, 障害福祉サービス等)
+model ServiceType {
+  id       Int       @id @default(autoincrement())
+  fieldId  Int?
+  field    Field?    @relation(fields: [fieldId], references: [id])
+  name     String    // 例: 特別養護老人ホーム, 訪問介護
+  posts    Post[]
+  profiles Profile[]
+}
+
+// 職種マスタ (介護福祉士, ケアマネジャー, 相談支援専門員等)
+model Occupation {
+  id       Int       @id @default(autoincrement())
+  name     String    // 例: 介護福祉士, ケアマネジャー
+  posts    Post[]
+  profiles Profile[]
+}
+
+model Industry {
+  id         Int        @id @default(autoincrement())
+  name       String     // 業界名: 介護福祉, 看護, 保育 等
+  slug       String     @unique // url用の識別子: care, nursing 等
+  categories Category[]
+  posts      Post[]
+}
+
+model Category {
+  id           Int      @id @default(autoincrement())
+  industryId   Int
+  industry     Industry @relation(fields: [industryId], references: [id])
+  name         String   // カテゴリ名
+  displayOrder Int
+  posts        Post[]
+}
+
+model Post {
+  id                  Int             @id @default(autoincrement())
+  postType            String          @default("ISSUE") // ISSUE (課題), SUCCESS_STORY (改善・成功事例)
+  industryId          Int
+  industry            Industry        @relation(fields: [industryId], references: [id])
+  categoryId          Int
+  category            Category        @relation(fields: [categoryId], references: [id])
+  
+  // Ver.2 拡張属性
+  fieldId             Int?
+  field               Field?          @relation(fields: [fieldId], references: [id])
+  prefectureId        Int?
+  prefecture          Prefecture?     @relation(fields: [prefectureId], references: [id])
+  municipalityId      Int?
+  municipality        Municipality?   @relation(fields: [municipalityId], references: [id])
+  serviceTypeId       Int?
+  serviceType         ServiceType?    @relation(fields: [serviceTypeId], references: [id])
+  occupationId        Int?
+  occupation          Occupation?     @relation(fields: [occupationId], references: [id])
+  
+  userId              Int?            // 投稿者ID (任意)
+  user                User?           @relation(fields: [userId], references: [id])
+  title               String
+  content             String
+  frequency           String?         // DAILY, WEEKLY, MONTHLY, RARELY, UNKNOWN
+  urgency             String?         // LOW, MEDIUM, HIGH, CRITICAL
+  resolutionStatus    String          @default("UNHANDLED") // UNHANDLED, UNDER_REVIEW, IMPROVING, RESOLVED
+  improvementProposal String?         // 現場からの改善案 (自由記述)
+  
+  // 互換用属性
+  posterType          String          // ANONYMOUS, NICKNAME
+  posterOccupation    String          // 投稿時の職種名
+  posterExperienceYears Int           // 投稿時の経験年数
+  posterPrefecture    String          // 投稿時の都道府県名
+  
+  status              String          @default("PUBLISHED") // PUBLISHED, DRAFT, MODERATING, DELETED
+  createdAt           DateTime        @default(now())
+
+  // 関連テーブル
+  objectiveData       ObjectiveData?
+  issueGroupId        Int?
+  issueGroup          IssueGroup?     @relation(fields: [issueGroupId], references: [id])
+  comments            Comment[]
+  reactions           Reaction[]
+  tags                PostTag[]
+  aiAnalyses          AiAnalysis[]
+}
+
+// 客観的データ（夜勤回数、残業時間等）
+model ObjectiveData {
+  id                Int      @id @default(autoincrement())
+  postId            Int      @unique
+  post              Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  nightShiftCount   Int?     // 月の夜勤回数
+  nightShiftHours   Int?     // 1回の夜勤時間 (時間)
+  nightShiftStaff   Int?     // 夜勤人数
+  assignedResidents Int?     // 担当利用者数
+  overtimeHours     Int?     // 残業時間 (月時間または夜勤明け残業時間)
+}
+
+// AI・管理者による課題グループ集約
+model IssueGroup {
+  id          Int      @id @default(autoincrement())
+  title       String   // 例: 夜勤時の人員配置問題
+  summary     String?  // 課題グループの要約
+  status      String   @default("OPEN") // OPEN, CLOSED
+  createdAt   DateTime @default(now())
+  posts       Post[]
+}
+
+model Tag {
+  id    Int       @id @default(autoincrement())
+  name  String    @unique
+  posts PostTag[]
+}
+
+model PostTag {
+  postId Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tagId  Int
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  postId     Int
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId     Int?
+  user       User?    @relation(fields: [userId], references: [id])
+  content    String
+  posterType String   // ANONYMOUS, NICKNAME
+  status     String   @default("PUBLISHED") // PUBLISHED, DELETED
+  createdAt  DateTime @default(now())
+}
+
+model Reaction {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  type      String   // SAME_WORKPLACE (同じ現場です), HELPFUL (参考になった), AGREE (賛成), DISAGREE (反対)
+  ipAddress String?  // 簡易ユニーク判定用IP
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId, type])
+}
+
+model AiAnalysis {
+  id          Int      @id @default(autoincrement())
+  postId      Int
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  summary     String   // 問題の要約
+  rootCause   String   // 根本原因の推測
+  suggestions String   // 改善アイデア
+  analyzedAt  DateTime @default(now())
+}

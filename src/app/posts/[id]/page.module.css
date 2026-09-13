@@ -1,0 +1,388 @@
+.detailCard {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 1.25rem;
+}
+
+.typeBadge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 0.8rem;
+  margin-right: 0.5rem;
+}
+
+.typeBadgeIssue {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.typeBadgeSuccess {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.resolutionBadge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.resUnhandled {
+  background-color: #f5f5f5;
+  color: #616161;
+}
+
+.resUnderReview {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.resImproving {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.resResolved {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Objective Data Grid */
+.objectiveGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin: 1.2rem 0;
+}
+
+@media (min-width: 480px) {
+  .objectiveGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.objectiveCard {
+  text-align: center;
+  background-color: var(--surface);
+  padding: 0.6rem 0.4rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.objectiveValue {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--primary);
+}
+
+.objectiveLabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Improvement Proposal Box */
+.proposalBox {
+  background-color: var(--secondary-light);
+  border: 1px solid var(--secondary);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin: 1.2rem 0;
+}
+
+.proposalTitle {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--secondary-hover);
+  margin-bottom: 0.4rem;
+}
+
+.proposalContent {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.categoryBadge {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+}
+
+.prefectureAndDate {
+  color: var(--text-muted);
+  display: flex;
+  gap: 0.75rem;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1.4;
+  color: var(--text-main);
+  margin-bottom: 1.2rem;
+}
+
+.content {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-main);
+  white-space: pre-wrap;
+  margin-bottom: 1.5rem;
+}
+
+.posterMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.metaTag {
+  background-color: var(--background);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+/* Reaction Section Grid (4 Buttons) */
+.reactionsSection {
+  margin: 1.5rem 0;
+}
+
+.reactionsTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  margin-bottom: 0.8rem;
+}
+
+.reactionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+@media (min-width: 480px) {
+  .reactionsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.reactionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.8rem 0.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.reactionBtn:active {
+  transform: scale(0.95);
+}
+
+.reactionBtn .count {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* Button variants based on type */
+.btnSameWorkplace {
+  color: var(--secondary-hover);
+  border-color: var(--secondary-light);
+}
+.btnSameWorkplace.active, .btnSameWorkplace:hover {
+  background-color: var(--secondary-light);
+  border-color: var(--secondary);
+}
+
+.btnHelpful {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue-light);
+}
+.btnHelpful.active, .btnHelpful:hover {
+  background-color: var(--accent-blue-light);
+  border-color: var(--accent-blue);
+}
+
+.btnAgree {
+  color: var(--primary);
+  border-color: var(--primary-light);
+}
+.btnAgree.active, .btnAgree:hover {
+  background-color: var(--primary-light);
+  border-color: var(--primary);
+}
+
+.btnDisagree {
+  color: #c62828;
+  border-color: #ffebee;
+}
+.btnDisagree.active, .btnDisagree:hover {
+  background-color: #ffebee;
+  border-color: #ef9a9a;
+}
+
+/* AI Analysis Section Accordion */
+.aiAnalysisBox {
+  background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.aiHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.aiTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--primary-hover);
+}
+
+.aiBadge {
+  background-color: var(--surface);
+  color: var(--primary);
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 700;
+  border: 1px solid var(--primary-light);
+}
+
+.aiContent {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(46, 111, 64, 0.2);
+  font-size: 0.9rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+.aiNote {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.8rem;
+  font-style: italic;
+}
+
+.aiSection {
+  margin-bottom: 0.8rem;
+}
+
+.aiSectionTitle {
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.aiSectionBody {
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Comments Section */
+.commentsSection {
+  margin-top: 2rem;
+}
+
+.commentsTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+
+.commentCard {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.commentMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.commentContent {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+.commentForm {
+  margin-top: 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.commentSubmitBtn {
+  background-color: var(--primary);
+  color: var(--surface);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.9rem;
+  float: right;
+  margin-top: 0.5rem;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
