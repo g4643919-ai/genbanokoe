@@ -21,20 +21,22 @@ export default function RootLayout({
             <span className="logo-badge">介護福祉</span>
           </Link>
           <div className="header-actions">
-            <Link href="/reports" style={{ marginRight: "0.5rem", fontSize: "0.85rem", color: "var(--primary-hover)", fontWeight: 700 }}>
-              📊 レポート
-            </Link>
-            <Link href="/success-stories" style={{ marginRight: "0.5rem", fontSize: "0.85rem", color: "#2e7d32", fontWeight: 700 }}>
-              💡 成功事例
-            </Link>
-            <Link href="/regions" style={{ marginRight: "0.5rem", fontSize: "0.85rem", color: "var(--primary)", fontWeight: 700 }}>
-              🗺️ 地域分析
-            </Link>
-            <Link href="/profile" className="btn-secondary" style={{ marginRight: "0.5rem", fontSize: "0.85rem", padding: "0.4rem 0.8rem", border: "1px solid var(--border)", borderRadius: "var(--radius-md)" }}>
-              マイページ
-            </Link>
-            <Link href="/posts/new" className="btn-primary">
-              投稿する
+            <div className="header-nav-links">
+              <Link href="/reports" className="header-nav-item item-reports">
+                📊 レポート
+              </Link>
+              <Link href="/success-stories" className="header-nav-item item-success">
+                💡 成功事例
+              </Link>
+              <Link href="/regions" className="header-nav-item item-regions">
+                🗺️ 地域分析
+              </Link>
+              <Link href="/profile" className="header-nav-item item-profile">
+                マイページ
+              </Link>
+            </div>
+            <Link href="/posts/new" className="btn-primary header-post-btn">
+              ＋ 投稿
             </Link>
           </div>
         </header>
